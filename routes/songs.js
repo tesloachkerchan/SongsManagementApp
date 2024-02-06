@@ -67,12 +67,46 @@ router.delete('/:id', async (req, res) => {
     const song = await Song.findByIdAndDelete(req.params.id);
 
     if (!song) {
-      return res.status(404).send();
+      return res.status(404).send('song not found');
     }
 
     res.send(song);
   } catch (error) {
     res.status(500).send(error);
+  }
+});
+// Get overall statistics
+router.get('/statistics', async (req, res) => {
+  try {
+    const totalSongs = await Song.countDocuments();
+    const totalArtists = await Song.distinct('artist').length;
+    const totalAlbums = await Song.distinct('album').length;
+    const totalGenres = await Song.distinct('genre').length;
+
+    const songsByGenre = await Song.aggregate([
+      { $group: { _id: '$genre', count: { $sum: 1 } } }
+    ]);
+
+    const songsByArtist = await Song.aggregate([
+      { $group: { _id: '$artist', count: { $sum: 1 } } }
+    ]);
+
+    const songsByAlbum = await Song.aggregate([
+      { $group: { _id: '$album', count: { $sum: 1 } } }
+    ]);
+
+    res.json({
+      totalSongs,
+      totalArtists,
+      totalAlbums,
+      totalGenres,
+      songsByGenre,
+      songsByArtist,
+      songsByAlbum
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
