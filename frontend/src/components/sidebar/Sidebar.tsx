@@ -3,6 +3,9 @@ import './sidebar.css';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import Filter1Icon from '@mui/icons-material/Filter1';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
+import SearchIcon from '@mui/icons-material/Search';
+import HomeIcon from '@mui/icons-material/Home';
+import { Link } from 'react-router-dom';
 
 interface SidebarProps {
   handleFilter: (filterType: string) => void;
@@ -23,11 +26,23 @@ function Sidebar({ handleFilter }: SidebarProps) {
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
+        <div className="searchBar">
+          <SearchIcon className='searchIcon'/>
+          <input type='text' placeholder='search' className="searchInput" />
+        </div>
         <ul className="sidebarList">
-          <li className="sidebarListItem">
+          <Link to='/'>
+            <li className="sidebarListItem">
+              <HomeIcon className="sidebarIcon" />
+              <span className="sidebarListItemText">Home</span>
+            </li>
+          </Link>
+          <Link to='statistic'>
+            <li className="sidebarListItem">
             <AnalyticsIcon className="sidebarIcon" />
             <span className="sidebarListItemText">Statistics</span>
           </li>
+          </Link>
           <li className="sidebarListItem">
             <LibraryMusicIcon className="sidebarIcon" />
             <span className="sidebarListItemText">Add Song</span>

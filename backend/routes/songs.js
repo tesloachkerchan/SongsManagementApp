@@ -79,9 +79,9 @@ router.delete('/:id', async (req, res) => {
 router.get('/statistics', async (req, res) => {
   try {
     const totalSongs = await Song.countDocuments();
-    const totalArtists = await Song.distinct('artist').length;
-    const totalAlbums = await Song.distinct('album').length;
-    const totalGenres = await Song.distinct('genre').length;
+    const totalArtists = await Song.distinct('artist').exec(); // Using exec() to execute the distinct() query
+    const totalAlbums = await Song.distinct('album').exec(); // Using exec() to execute the distinct() query
+    const totalGenres = await Song.distinct('genre').exec(); // Using exec() to execute the distinct() query
 
     const songsByGenre = await Song.aggregate([
       { $group: { _id: '$genre', count: { $sum: 1 } } }

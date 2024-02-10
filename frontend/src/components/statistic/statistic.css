@@ -1,0 +1,25 @@
+/* Statistic.css */
+
+.statistics {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.statistics h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.statistics p {
+    margin-bottom: 10px;
+}
+
+.statistics ul {
+    list-style: none;
+    padding: 0;
+}
+
+.statistics li {
+    margin-bottom: 5px;
+}

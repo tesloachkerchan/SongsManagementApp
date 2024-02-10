@@ -1,8 +1,8 @@
 import React from 'react';
 import Topbar from '../../components/topbar/Topbar';
 import Sidebar from '../../components/sidebar/Sidebar';
-import Main from '../../components/main/Main';
 import './home.css';
+import Center from '../../components/center/Center';
 
 function Home() {
   const handleFilter = (filterType: string) => {
@@ -16,7 +16,7 @@ function Home() {
         <Topbar />
         <div className="homeContainer">
           <Sidebar handleFilter={handleFilter} />
-          <Main />
+          <Center />
         </div>
       </>
     </div>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import './main.css';
 
 interface Song {
-  id: number;
+  _id: string;
   title: string;
   artist: string;
   album: string;
@@ -26,6 +26,16 @@ function Main() {
     }
   };
 
+  const deleteSong = async (id: string) => {
+    try {
+      await axios.delete(`http://localhost:4000/api/v1/song/${id}`);
+      // Remove the deleted song from the state
+      setSongs(songs.filter(song => song._id !== id));
+    } catch (error) {
+      console.error('Error deleting song:', error);
+    }
+  };
+
   return (
     <div className='main'>
       <div className='header'>
@@ -44,14 +54,14 @@ function Main() {
         </thead>
         <tbody>
           {songs.map((song) => (
-            <tr key={song.id}>
+            <tr key={song._id}>
               <td>{song.title}</td>
               <td>{song.artist}</td>
               <td>{song.album}</td>
               <td>{song.genre}</td>
               <td>
-                  <button className="editButton">Update</button>
-                  <button className="deleteButton">Delete</button>
+                <button className="editButton">Update</button>
+                <button className="deleteButton" onClick={() => deleteSong(song._id)}>Delete</button>
               </td>
             </tr>
           ))}
