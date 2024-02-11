@@ -97,9 +97,9 @@ router.get('/statistics', async (req, res) => {
 
     res.json({
       totalSongs,
-      totalArtists,
-      totalAlbums,
-      totalGenres,
+      totalArtists: totalArtists.length,
+      totalAlbums: totalAlbums.length,
+      totalGenres: totalGenres.length,
       songsByGenre,
       songsByArtist,
       songsByAlbum

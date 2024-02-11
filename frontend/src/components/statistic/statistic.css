@@ -1,14 +1,20 @@
 /* Statistic.css */
 
 .statistics {
-    padding: 20px;
-    border: 1px solid #ccc;
     border-radius: 5px;
+    margin-top: 40px;
+    margin: 15px;
 }
 
 .statistics h2 {
     font-size: 1.5rem;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+    text-align: center;
+    font-size: xx-large;
+}
+hr {
+    color: #f2f2f2;
+    width: 100%;
 }
 
 .statistics p {
@@ -22,4 +28,60 @@
 
 .statistics li {
     margin-bottom: 5px;
+}
+.box-info{
+    display: flex;
+    width: 100%;
+}
+.box-info li{
+    margin: 20px;
+    display: flex;
+    list-style: none;
+    flex: 2.5;
+    background-color: #f2f2f2;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10%;
+    cursor: pointer;
+}
+.box-info li:hover{
+    background-color: rgb(242, 236, 236);
+}
+.box-info li .icon{
+    margin-right: 20px;
+    height: 40px;
+    width: 40px;
+}
+.table-toggle{
+    text-align: center;
+    margin-top: 30px;
+}
+.table-toggle button{
+   margin: 5px;
+   padding: 7px;
+   border: none;
+   cursor: pointer;
+}
+.table-toggle button:hover{
+    background-color: rgb(242, 236, 236);
+}
+table {
+    border-collapse: collapse;
+    width: 95%;
+    margin: 30px;
+}
+
+table th,
+table td {
+    padding: 12px;
+    text-align: left;
+    cursor: pointer;
+}
+
+table th {
+    background-color: #f2f2f2;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
 }

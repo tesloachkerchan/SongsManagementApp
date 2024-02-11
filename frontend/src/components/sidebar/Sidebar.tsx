@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import './sidebar.css';
+import { Link } from 'react-router-dom';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import Filter1Icon from '@mui/icons-material/Filter1';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
-import { Link } from 'react-router-dom';
+import './sidebar.css';
 
 interface SidebarProps {
   handleFilter: (filterType: string) => void;
@@ -31,21 +31,17 @@ function Sidebar({ handleFilter }: SidebarProps) {
           <input type='text' placeholder='search' className="searchInput" />
         </div>
         <ul className="sidebarList">
-          <Link to='/'>
-            <li className="sidebarListItem">
+          <li className="sidebarListItem">
+            <Link to='/'>
               <HomeIcon className="sidebarIcon" />
               <span className="sidebarListItemText">Home</span>
-            </li>
-          </Link>
-          <Link to='statistic'>
-            <li className="sidebarListItem">
-            <AnalyticsIcon className="sidebarIcon" />
-            <span className="sidebarListItemText">Statistics</span>
+            </Link>
           </li>
-          </Link>
           <li className="sidebarListItem">
-            <LibraryMusicIcon className="sidebarIcon" />
-            <span className="sidebarListItemText">Add Song</span>
+            <Link to='/statistic'>
+              <AnalyticsIcon className="sidebarIcon" />
+              <span className="sidebarListItemText">Statistics</span>
+            </Link>
           </li>
           <li className="sidebarListItem" onClick={handleClickFilter}>
             <Filter1Icon className="sidebarIcon" />

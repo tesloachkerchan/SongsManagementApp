@@ -70,7 +70,14 @@
     outline: none;
 }
 
+.sidebarListItem a {
+    text-decoration: none;
+    color: black;
+}
 
+.sidebarListItem a:hover {
+    color: black;
+}
 
 
 

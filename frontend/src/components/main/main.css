@@ -1,14 +1,25 @@
 .main{
     flex: 8.5;
     text-align: center;
+    margin: 15px;
 }
 .header{
-    margin-top: 40px;
+    display: flex;
+}
+.header button{
+    margin-left: 50px;
+    border: none;
+    font-size: large;
+    background: none;
+    cursor: pointer;
+}
+.header h2{
+    margin-bottom: 5px;
+    font-size: xx-large;
 }
 hr{
     color: #f2f2f2;
-    width: 50%;
-    margin-left: 300px;
+    width: 100%;
 }
 table {
     border-collapse: collapse;
@@ -69,4 +80,37 @@ table tr:nth-child(even) {
 
 .pagination button:disabled {
     background-color: #ccc;
+}
+.add-song{
+    margin-top: 30px;
+}
+.add-song h2{
+    margin-bottom: 10px;
+}
+.add-song form input{
+    margin: 5px;
+}
+.add-song form button{
+    border: none;
+    padding: 7px;
+    border-radius: 5px;
+    background: green;
+    color: #fff;
+}
+.edit-song{
+    margin-top: 30px;
+}
+.edit-song h2{
+    margin-bottom: 10px;
+}
+.edit-song form input{
+    margin: 5px;
+    padding: 5px;
+}
+.edit-song form button{
+    border: none;
+    padding: 7px;
+    border-radius: 5px;
+    background: green;
+    color: #fff;
 }
