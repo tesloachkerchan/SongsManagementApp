@@ -13,7 +13,7 @@ interface Song {
 function Main() {
   const [songs, setSongs] = useState<Song[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [songsPerPage] = useState(5); // Change the number of songs per page as needed
+  const [songsPerPage] = useState(6); // Change the number of songs per page as needed
   const [editSong, setEditSong] = useState<Song | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newSong, setNewSong] = useState<Song>({
@@ -53,7 +53,7 @@ function Main() {
 
   const handleUpdate = async (updatedSong: Song) => {
     try {
-      const response = await axios.put(`http://localhost:4000/api/v1/song/${updatedSong._id}`, updatedSong);
+      const response = await axios.patch(`http://localhost:4000/api/v1/song/${updatedSong._id}`, updatedSong);
       const updatedSongData = response.data;
       setSongs(songs.map(song => (song._id === updatedSongData._id ? updatedSongData : song)));
       setEditSong(null); // Clear the edit state
@@ -100,43 +100,52 @@ function Main() {
     <div className='main'>
       <div className='header'>
         <h2>Songs List</h2>
-        <button onClick={() => setShowCreateForm(!showCreateForm)}>AddSong</button>
-        
+        <button onClick={() => setShowCreateForm(!showCreateForm)}>
+          {showCreateForm ? 'Hide Form' : 'Add Song'}
+        </button>
       </div>
       <hr />
-      <table>
-        <thead>
-          <tr>
-            <th>title</th>
-            <th>artist</th>
-            <th>album</th>
-            <th>genre</th>
-            <th>action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentSongs.map((song) => (
-            <tr key={song._id}>
-              <td>{song.title}</td>
-              <td>{song.artist}</td>
-              <td>{song.album}</td>
-              <td>{song.genre}</td>
-              <td>
-                <button className="editButton" onClick={() => handleEdit(song)}>Update</button>
-                <button className="deleteButton" onClick={() => deleteSong(song._id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="pagination">
-        <button className="prev-btn" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>Prev</button>
-        <button className="next-btn" onClick={() => paginate(currentPage + 1)} disabled={currentSongs.length < songsPerPage}>Next</button>
-      </div>
+      {!showCreateForm && (
+        <React.Fragment>
+          <table>
+            <thead>
+              <tr>
+                <th>title</th>
+                <th>artist</th>
+                <th>album</th>
+                <th>genre</th>
+                <th>action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentSongs.map((song) => (
+                <tr key={song._id}>
+                  <td>{song.title}</td>
+                  <td>{song.artist}</td>
+                  <td>{song.album}</td>
+                  <td>{song.genre}</td>
+                  <td>
+                    <button className="editButton" onClick={() => handleEdit(song)}>Update</button>
+                    <button className="deleteButton" onClick={() => deleteSong(song._id)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="pagination">
+            <button className="prev-btn" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>Prev</button>
+            <span>{`Page ${currentPage} of ${Math.ceil((songs.length )/ songsPerPage)}`}</span>
+            <button className="next-btn" onClick={() => paginate(currentPage + 1)} disabled={currentPage===Math.ceil((songs.length )/ songsPerPage)}>Next</button>
+          </div>
+        </React.Fragment>
+      )}
       {editSong && (
-        <div className='edit-song'>
+        <div className='add-song'>
           <h2>Edit Song</h2>
-          <form onSubmit={() => handleUpdate(editSong)}>
+          <form onSubmit={(e) => {
+            e.preventDefault(); 
+            handleUpdate(editSong)
+          }}>
             <input type="text" name="title" value={editSong.title} onChange={(e) => setEditSong({...editSong, title: e.target.value})} />
             <input type="text" name="artist" value={editSong.artist} onChange={(e) => setEditSong({...editSong, artist: e.target.value})} />
             <input type="text" name="album" value={editSong.album} onChange={(e) => setEditSong({...editSong, album: e.target.value})} />
@@ -147,17 +156,17 @@ function Main() {
       )}
       {showCreateForm && (
         <div className='add-song'>
-          <h2>Create Song</h2>
-          <form onSubmit={handleCreate}>
-            <input type="text" name="title" placeholder="Title" value={newSong.title} onChange={handleChange} />
-            <input type="text" name="artist" placeholder="Artist" value={newSong.artist} onChange={handleChange} />
-            <input type="text" name="album" placeholder="Album" value={newSong.album} onChange={handleChange} />
-            <input type="text" name="genre" placeholder="Genre" value={newSong.genre} onChange={handleChange} />
-            <button type="submit">Create</button>
-          </form>
-        </div>
+  <h2>Create Song</h2>
+  <form onSubmit={handleCreate}>
+    <input type="text" name="title" placeholder="Title" value={newSong.title} onChange={handleChange} />
+    <input type="text" name="artist" placeholder="Artist" value={newSong.artist} onChange={handleChange} />
+    <input type="text" name="album" placeholder="Album" value={newSong.album} onChange={handleChange} />
+    <input type="text" name="genre" placeholder="Genre" value={newSong.genre} onChange={handleChange} />
+    <button type="submit">Create</button>
+  </form>
+</div>
+
       )}
-      
     </div>
   );
 }

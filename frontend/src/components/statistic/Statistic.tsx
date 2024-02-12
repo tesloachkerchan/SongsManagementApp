@@ -19,6 +19,8 @@ interface StatisticData {
 function Statistic() {
   const [statistics, setStatistics] = useState<StatisticData | null>(null);
   const [displayTable, setDisplayTable] = useState<'artist' | 'album' | 'genre'>('artist');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 4; // Change this value to adjust the number of items per page
   const [selectedArtist, setSelectedArtist] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,13 +36,54 @@ function Statistic() {
     }
   };
 
+  const handleTableChange = (table: 'artist' | 'album' | 'genre') => {
+    setDisplayTable(table);
+    setCurrentPage(1); // Reset current page when changing tables
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, Math.ceil(getTotalItems() / itemsPerPage)));
+  };
+
+  const getTotalItems = () => {
+    switch (displayTable) {
+      case 'artist':
+        return statistics?.songsByArtist.length ?? 0;
+      case 'album':
+        return statistics?.songsByAlbum.length ?? 0;
+      case 'genre':
+        return selectedArtist
+          ? statistics?.songsByGenre.filter((song) => song._id === selectedArtist).length ?? 0
+          : statistics?.songsByGenre.length ?? 0;
+      default:
+        return 0;
+    }
+  };
+
+  const getCurrentItems = () => {
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  switch (displayTable) {
+    case 'artist':
+      return statistics?.songsByArtist.slice(startIndex, endIndex) ?? [];
+    case 'album':
+      return statistics?.songsByAlbum.slice(startIndex, endIndex) ?? [];
+    case 'genre':
+      return selectedArtist
+        ? statistics?.songsByGenre.filter((song) => song._id === selectedArtist).slice(startIndex, endIndex) ?? []
+        : statistics?.songsByGenre.slice(startIndex, endIndex) ?? [];
+    default:
+      return [];
+  }
+};
+
   const handleArtistClick = (artistId: string) => {
     setSelectedArtist(artistId);
     setDisplayTable('genre');
-  };
-
-  const handleTableChange = (table: 'artist' | 'album' | 'genre') => {
-    setDisplayTable(table);
   };
 
   return (
@@ -87,69 +130,81 @@ function Statistic() {
       {statistics && (
         <div className="table-info">
           {displayTable === 'artist' && (
-            <table>
-              <thead>
-                <tr>
-                  <th>artist</th>
-                  <th>total songs</th>
-                </tr>
-              </thead>
-              <tbody>
-                {statistics.songsByArtist.map((songsByArtist, index) => (
-                  <tr key={index} onClick={() => handleArtistClick(songsByArtist._id)}>
-                    <td>{songsByArtist._id}</td>
-                    <td>{songsByArtist.count}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+  <table>
+    <thead>
+      <tr>
+        <th>artist</th>
+        <th>total songs</th>
+      </tr>
+    </thead>
+    <tbody>
+      {getCurrentItems().map((songsByArtist, index) => (
+        <tr key={index} onClick={() => handleArtistClick(songsByArtist._id)}>
+          <td>{songsByArtist._id}</td>
+          <td>{songsByArtist.count}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}
+          {displayTable === 'artist' && (
+            <div className="pagination">
+              <button className="prev-btn" onClick={handlePrevPage} disabled={currentPage === 1}>Prev</button>
+              <span>{`Page ${currentPage} of ${Math.ceil(getTotalItems() / itemsPerPage)}`}</span>
+              <button className="next-btn" onClick={handleNextPage} disabled={currentPage === Math.ceil(getTotalItems() / itemsPerPage)}>Next</button>
+            </div>
           )}
           {displayTable === 'album' && (
-            <table>
-              <thead>
-                <tr>
-                  <th>album</th>
-                  <th>total songs</th>
-                </tr>
-              </thead>
-              <tbody>
-                {statistics.songsByAlbum.map((albumStat, index) => (
-                  <tr key={index}>
-                    <td>{albumStat._id}</td>
-                    <td>{albumStat.count}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+  <table>
+    <thead>
+      <tr>
+        <th>album</th>
+        <th>total songs</th>
+      </tr>
+    </thead>
+    <tbody>
+      {getCurrentItems().map((albumStat, index) => (
+        <tr key={index}>
+          <td>{albumStat._id}</td>
+          <td>{albumStat.count}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
           )}
-          {displayTable === 'genre' && (
-            <table>
-              <thead>
-                <tr>
-                  <th>genre</th>
-                  <th>total songs</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedArtist ?
-                  statistics.songsByGenre
-                    .filter((song) => song._id === selectedArtist)
-                    .map((genreStat, index) => (
-                      <tr key={index}>
-                        <td>{genreStat._id}</td>
-                        <td>{genreStat.count}</td>
-                      </tr>
-                    ))
-                  :
-                  statistics.songsByGenre.map((genreStat, index) => (
-                    <tr key={index}>
-                      <td>{genreStat._id}</td>
-                      <td>{genreStat.count}</td>
-                    </tr>
-                  ))
-                }
-              </tbody>
-            </table>
+          {displayTable === 'album' && (
+            <div className="pagination">
+              <button className="prev-btn" onClick={handlePrevPage} disabled={currentPage === 1}>Prev</button>
+              <span>{`Page ${currentPage} of ${Math.ceil(getTotalItems() / itemsPerPage)}`}</span>
+              <button className="next-btn" onClick={handleNextPage} disabled={currentPage === Math.ceil(getTotalItems() / itemsPerPage)}>Next</button>
+            </div>
+          )}
+          
+
+{displayTable === 'genre' && (
+  <table>
+    <thead>
+      <tr>
+        <th>genre</th>
+        <th>total songs</th>
+      </tr>
+    </thead>
+    <tbody>
+      {getCurrentItems().map((genreStat, index) => (
+        <tr key={index}>
+          <td>{genreStat._id}</td>
+          <td>{genreStat.count}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}
+        {displayTable === 'genre' && (
+            <div className="pagination">
+              <button className="prev-btn" onClick={handlePrevPage} disabled={currentPage === 1}>Prev</button>
+              <span>{`Page ${currentPage} of ${Math.ceil(getTotalItems() / itemsPerPage)}`}</span>
+              <button className="next-btn" onClick={handleNextPage} disabled={currentPage === Math.ceil(getTotalItems() / itemsPerPage)}>Next</button>
+            </div>
           )}
         </div>
       )}

@@ -25,6 +25,7 @@ table {
     border-collapse: collapse;
     width: 95%;
     margin: 30px;
+    text-transform: capitalize;
 }
 
 table th,
@@ -41,8 +42,13 @@ table th {
 table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+table tr:hover{
+    -webkit-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+        box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+}
 .editButton {
-    background-color: green;
+    background-color: gray;
     color: white;
     margin: 5px;
     border: none;
@@ -111,6 +117,46 @@ table tr:nth-child(even) {
     border: none;
     padding: 7px;
     border-radius: 5px;
-    background: green;
+    background: gray;
     color: #fff;
+}
+.add-song {
+    margin-left: 25%;
+    width: 50%;
+}
+
+.add-song h2 {
+    margin-bottom: 10px;
+}
+
+.add-song form {
+    display: grid;
+    grid-gap: 10px;
+}
+
+.add-song input[type="text"],
+.add-song button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.add-song button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.add-song button:hover {
+    background-color: #0056b3;
+}
+
+.add-song input[type="text"]::placeholder {
+    color: #aaa;
+}
+
+.add-song input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
 }

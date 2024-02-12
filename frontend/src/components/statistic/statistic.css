@@ -45,7 +45,9 @@ hr {
     cursor: pointer;
 }
 .box-info li:hover{
-    background-color: rgb(242, 236, 236);
+    -webkit-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+        box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
 }
 .box-info li .icon{
     margin-right: 20px;
@@ -60,10 +62,13 @@ hr {
    margin: 5px;
    padding: 7px;
    border: none;
+   border-radius: 5px;
    cursor: pointer;
 }
 .table-toggle button:hover{
-    background-color: rgb(242, 236, 236);
+    -webkit-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+        box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
 }
 table {
     border-collapse: collapse;

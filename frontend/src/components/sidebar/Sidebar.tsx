@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import Filter1Icon from '@mui/icons-material/Filter1';
-import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import './sidebar.css';
