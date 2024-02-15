@@ -1,8 +1,12 @@
 import React from 'react';
 import Topbar from '../../components/topbar/Topbar';
 import Sidebar from '../../components/sidebar/Sidebar';
-import './home.css';
 import Center from '../../components/center/Center';
+import styled from '@emotion/styled';
+
+const HomeContainer = styled.div`
+    display: flex;
+    width: 100%;`
 
 function Home() {
   const handleFilter = (filterType: string) => {
@@ -14,10 +18,10 @@ function Home() {
     <div>
       <>
         <Topbar />
-        <div className="homeContainer">
+        <HomeContainer>
           <Sidebar handleFilter={handleFilter} />
           <Center />
-        </div>
+        </HomeContainer>
       </>
     </div>
   );

@@ -4,7 +4,132 @@ import AlbumIcon from '@mui/icons-material/Album';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import axios from 'axios';
-import './statistic.css';
+import styled from '@emotion/styled';
+
+// Styled components for the styles
+const StatisticsContainer = styled.div`
+    border-radius: 5px;
+    margin-top: 40px;
+    margin: 15px;
+`;
+
+const StatisticsTitle = styled.h2`
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    text-align: center;
+    font-size: xx-large;
+`;
+
+const Hr = styled.hr`
+    color: #f2f2f2;
+    width: 100%;
+`;
+
+const BoxInfo = styled.div`
+    display: flex;
+
+    li {
+        margin: 20px;
+        display: flex;
+        list-style: none;
+        flex: 2.5;
+        background-color: #f2f2f2;
+        text-align: center;
+        padding: 25px;
+        border-radius: 10%;
+        cursor: pointer;
+
+        &:hover {
+            -webkit-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+            -moz-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+            box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+        }
+        .icon{
+    margin-right: 20px;
+    height: 40px;
+    width: 40px;
+}
+    }
+`;
+
+const Icon = styled.span`
+    margin-right: 20px;
+    height: 40px;
+    width: 40px;
+`;
+
+const TableToggle = styled.div`
+    text-align: center;
+    margin-top: 30px;
+
+    button {
+        margin: 5px;
+        padding: 7px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover {
+            -webkit-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+            -moz-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+            box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+        }
+    }
+`;
+
+const StyledTable = styled.table`
+    border-collapse: collapse;
+    width: 95%;
+    margin: 30px;
+
+    th, td {
+        text-align: center;
+        
+    }
+    td{
+      padding: 9px;
+      
+    }
+    tr{
+      &:hover{
+        -webkit-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+            -moz-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+            box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+      }
+    }
+
+    th {
+        padding: 12px;
+        cursor: pointer;
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+`;
+const Pagination = styled.div`
+  margin-top: 16px;
+  text-align: center;
+
+  button {
+    background-color: black;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 3px;
+    margin-left: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #ccc;
+    }
+
+    &:disabled {
+      background-color: #ccc;
+    }
+  }
+`;
 
 interface StatisticData {
   totalSongs: number;
@@ -87,128 +212,126 @@ function Statistic() {
   };
 
   return (
-    <div className='statistics'>
-      <h2>Statistics</h2>
-      <hr />
+    <StatisticsContainer>
+      <StatisticsTitle>Statistics</StatisticsTitle>
+      <Hr />
       {statistics && (
-        <div className="box-info">
+        <BoxInfo>
           <li>
             <LibraryMusicIcon className='icon'/>
-            <span className="text">
+            <Icon>
               <h3>{statistics.totalSongs}</h3>
               <p>Total Songs</p>
-            </span>
+            </Icon>
           </li>
           <li>
             <HeadsetMicIcon className='icon'/>
-            <span className="text">
+            <Icon>
               <h3>{statistics.totalArtists}</h3>
               <p>Total Artists</p>
-            </span>
+            </Icon>
           </li>
           <li>
             <AlbumIcon className='icon'/>
-            <span className="text">
+            <Icon>
               <h3>{statistics.totalAlbums}</h3>
               <p>Total Album</p>
-            </span>
+            </Icon>
           </li>
           <li>
             <MusicNoteIcon className='icon'/>
-            <span className="text">
+            <Icon>
               <h3>{statistics.totalGenres}</h3>
               <p>Total Genres</p>
-            </span>
+            </Icon>
           </li>
-        </div>
+        </BoxInfo>
       )}
-      <div className="table-toggle">
+      <TableToggle>
         <button onClick={() => handleTableChange('artist')}>Artist Songs</button>
         <button onClick={() => handleTableChange('album')}>Album Songs</button>
         <button onClick={() => handleTableChange('genre')}>Genre Songs</button>
-      </div>
+      </TableToggle>
       {statistics && (
         <div className="table-info">
           {displayTable === 'artist' && (
-  <table>
-    <thead>
-      <tr>
-        <th>artist</th>
-        <th>total songs</th>
-      </tr>
-    </thead>
-    <tbody>
-      {getCurrentItems().map((songsByArtist, index) => (
-        <tr key={index} onClick={() => handleArtistClick(songsByArtist._id)}>
-          <td>{songsByArtist._id}</td>
-          <td>{songsByArtist.count}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-)}
+            <StyledTable>
+              <thead>
+                <tr>
+                  <th>artist</th>
+                  <th>total songs</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getCurrentItems().map((songsByArtist, index) => (
+                  <tr key={index} onClick={() => handleArtistClick(songsByArtist._id)}>
+                    <td>{songsByArtist._id}</td>
+                    <td>{songsByArtist.count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </StyledTable>
+          )}
           {displayTable === 'artist' && (
-            <div className="pagination">
+            <Pagination>
               <button className="prev-btn" onClick={handlePrevPage} disabled={currentPage === 1}>Prev</button>
               <span>{`Page ${currentPage} of ${Math.ceil(getTotalItems() / itemsPerPage)}`}</span>
               <button className="next-btn" onClick={handleNextPage} disabled={currentPage === Math.ceil(getTotalItems() / itemsPerPage)}>Next</button>
-            </div>
+            </Pagination>
           )}
           {displayTable === 'album' && (
-  <table>
-    <thead>
-      <tr>
-        <th>album</th>
-        <th>total songs</th>
-      </tr>
-    </thead>
-    <tbody>
-      {getCurrentItems().map((albumStat, index) => (
-        <tr key={index}>
-          <td>{albumStat._id}</td>
-          <td>{albumStat.count}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
+            <StyledTable>
+              <thead>
+                <tr>
+                  <th>album</th>
+                  <th>total songs</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getCurrentItems().map((albumStat, index) => (
+                  <tr key={index}>
+                    <td>{albumStat._id}</td>
+                    <td>{albumStat.count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </StyledTable>
           )}
           {displayTable === 'album' && (
-            <div className="pagination">
+            <Pagination>
               <button className="prev-btn" onClick={handlePrevPage} disabled={currentPage === 1}>Prev</button>
               <span>{`Page ${currentPage} of ${Math.ceil(getTotalItems() / itemsPerPage)}`}</span>
               <button className="next-btn" onClick={handleNextPage} disabled={currentPage === Math.ceil(getTotalItems() / itemsPerPage)}>Next</button>
-            </div>
+            </Pagination>
           )}
-          
-
-{displayTable === 'genre' && (
-  <table>
-    <thead>
-      <tr>
-        <th>genre</th>
-        <th>total songs</th>
-      </tr>
-    </thead>
-    <tbody>
-      {getCurrentItems().map((genreStat, index) => (
-        <tr key={index}>
-          <td>{genreStat._id}</td>
-          <td>{genreStat.count}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-)}
-        {displayTable === 'genre' && (
-            <div className="pagination">
+          {displayTable === 'genre' && (
+            <StyledTable>
+              <thead>
+                <tr>
+                  <th>genre</th>
+                  <th>total songs</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getCurrentItems().map((genreStat, index) => (
+                  <tr key={index}>
+                    <td>{genreStat._id}</td>
+                    <td>{genreStat.count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </StyledTable>
+          )}
+          {displayTable === 'genre' && (
+            <Pagination>
               <button className="prev-btn" onClick={handlePrevPage} disabled={currentPage === 1}>Prev</button>
               <span>{`Page ${currentPage} of ${Math.ceil(getTotalItems() / itemsPerPage)}`}</span>
               <button className="next-btn" onClick={handleNextPage} disabled={currentPage === Math.ceil(getTotalItems() / itemsPerPage)}>Next</button>
-            </div>
+            </Pagination>
           )}
         </div>
       )}
-    </div>
+    </StatisticsContainer>
   );
 }
 

@@ -9,8 +9,10 @@ const app = express()
 app.use(cors())
 app.use(express.json());
 //route 
-app.use('/api/v1/song',songRoute)
-mongoose.connect('mongodb://127.0.0.1:27017/songApp')
+app.use('/api/v1/song', songRoute)
+MONGO_URL = process.env.MONGO_URL;
+const port = process.env.PORT || 8000; 
+mongoose.connect(MONGO_URL)
     .then(() => {
         console.log('mongodb connected!')
     })
@@ -18,6 +20,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/songApp')
         console.log(err)
     })
 
-app.listen(4000, () => {
+app.listen(port, () => {
     console.log('server is running!')
 })

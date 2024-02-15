@@ -1,7 +1,143 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './main.css';
+import styled from '@emotion/styled';
 
+// Styled components for the styles
+const MainContainer = styled.div`
+  flex: 8.5;
+  text-align: center;
+  margin: 15px;
+`;
+
+const Header = styled.div`
+  display: flex;
+`;
+
+const Button = styled.button`
+  margin-left: 50px;
+  border: none;
+  font-size: large;
+  background: none;
+  cursor: pointer;
+`;
+
+const HeaderTitle = styled.h2`
+  margin-bottom: 5px;
+  font-size: xx-large;
+`;
+
+const Hr = styled.hr`
+  color: #f2f2f2;
+  width: 100%;
+`;
+
+const Table = styled.table`
+  border-collapse: collapse;
+  width: 95%;
+  margin: 30px;
+  text-transform: capitalize;
+`;
+
+const TableHeader = styled.th`
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+  background-color: #f2f2f2;
+`;
+
+const TableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  &:hover {
+    -webkit-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 1px 16px -7px rgba(0, 0, 0, 0.75);
+  }
+`;
+
+const EditButton = styled.button`
+  background-color: gray;
+  color: white;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  padding: 3px;
+  cursor: pointer;
+`;
+
+const DeleteButton = styled.button`
+  background-color: red;
+  color: white;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  padding: 3px;
+`;
+
+const Pagination = styled.div`
+  margin-top: 16px;
+  text-align: center;
+
+  button {
+    background-color: black;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 3px;
+    margin-left: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #ccc;
+    }
+
+    &:disabled {
+      background-color: #ccc;
+    }
+  }
+`;
+
+const AddSong = styled.div`
+  margin-top: 30px;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  form {
+    display: grid;
+    grid-gap: 10px;
+
+    input[type="text"],
+    button {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+
+    input[type="text"]::placeholder {
+      color: #aaa;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+  }
+`;
 interface Song {
   _id: string;
   title: string;
@@ -10,7 +146,9 @@ interface Song {
   genre: string;
 }
 
+// Functional component
 function Main() {
+  // Component logic...
   const [songs, setSongs] = useState<Song[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [songsPerPage] = useState(6); // Change the number of songs per page as needed
@@ -97,50 +235,50 @@ function Main() {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <div className='main'>
-      <div className='header'>
-        <h2>Songs List</h2>
-        <button onClick={() => setShowCreateForm(!showCreateForm)}>
+    <MainContainer>
+      <Header>
+        <HeaderTitle>Songs List</HeaderTitle>
+        <Button onClick={() => setShowCreateForm(!showCreateForm)}>
           {showCreateForm ? 'Hide Form' : 'Add Song'}
-        </button>
-      </div>
-      <hr />
+        </Button>
+      </Header>
+      <Hr />
       {!showCreateForm && (
         <React.Fragment>
-          <table>
+          <Table>
             <thead>
               <tr>
-                <th>title</th>
-                <th>artist</th>
-                <th>album</th>
-                <th>genre</th>
-                <th>action</th>
+                <TableHeader>title</TableHeader>
+                <TableHeader>artist</TableHeader>
+                <TableHeader>album</TableHeader>
+                <TableHeader>genre</TableHeader>
+                <TableHeader>action</TableHeader>
               </tr>
             </thead>
             <tbody>
               {currentSongs.map((song) => (
-                <tr key={song._id}>
+                <TableRow key={song._id}>
                   <td>{song.title}</td>
                   <td>{song.artist}</td>
                   <td>{song.album}</td>
                   <td>{song.genre}</td>
                   <td>
-                    <button className="editButton" onClick={() => handleEdit(song)}>Update</button>
-                    <button className="deleteButton" onClick={() => deleteSong(song._id)}>Delete</button>
+                    <EditButton onClick={() => handleEdit(song)}>Update</EditButton>
+                    <DeleteButton onClick={() => deleteSong(song._id)}>Delete</DeleteButton>
                   </td>
-                </tr>
+                </TableRow>
               ))}
             </tbody>
-          </table>
-          <div className="pagination">
+          </Table>
+          <Pagination>
             <button className="prev-btn" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>Prev</button>
             <span>{`Page ${currentPage} of ${Math.ceil((songs.length )/ songsPerPage)}`}</span>
             <button className="next-btn" onClick={() => paginate(currentPage + 1)} disabled={currentPage===Math.ceil((songs.length )/ songsPerPage)}>Next</button>
-          </div>
+          </Pagination>
         </React.Fragment>
       )}
       {editSong && (
-        <div className='add-song'>
+        <AddSong>
           <h2>Edit Song</h2>
           <form onSubmit={(e) => {
             e.preventDefault(); 
@@ -152,22 +290,21 @@ function Main() {
             <input type="text" name="genre" value={editSong.genre} onChange={(e) => setEditSong({...editSong, genre: e.target.value})} />
             <button type="submit">Save</button>
           </form>
-        </div>
+        </AddSong>
       )}
       {showCreateForm && (
-        <div className='add-song'>
-  <h2>Create Song</h2>
-  <form onSubmit={handleCreate}>
-    <input type="text" name="title" placeholder="Title" value={newSong.title} onChange={handleChange} />
-    <input type="text" name="artist" placeholder="Artist" value={newSong.artist} onChange={handleChange} />
-    <input type="text" name="album" placeholder="Album" value={newSong.album} onChange={handleChange} />
-    <input type="text" name="genre" placeholder="Genre" value={newSong.genre} onChange={handleChange} />
-    <button type="submit">Create</button>
-  </form>
-</div>
-
+        <AddSong>
+          <h2>Create Song</h2>
+          <form onSubmit={handleCreate}>
+            <input type="text" name="title" placeholder="Title" value={newSong.title} onChange={handleChange} />
+            <input type="text" name="artist" placeholder="Artist" value={newSong.artist} onChange={handleChange} />
+            <input type="text" name="album" placeholder="Album" value={newSong.album} onChange={handleChange} />
+            <input type="text" name="genre" placeholder="Genre" value={newSong.genre} onChange={handleChange} />
+            <button type="submit">Create</button>
+          </form>
+        </AddSong>
       )}
-    </div>
+    </MainContainer>
   );
 }
 
