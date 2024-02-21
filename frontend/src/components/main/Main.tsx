@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchSongStart, selectSong} from '../../state/songSlice';
+import { AppDispatch } from '../../state/store';
 import styled from '@emotion/styled';
 
 // Styled components for the styles
@@ -162,18 +165,13 @@ function Main() {
     genre: '',
   });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const dispatch: AppDispatch = useDispatch();
+  const song = useSelector(selectSong);
+  console.log(song)
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get<Song[]>('http://localhost:4000/api/v1/song');
-      setSongs(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+  useEffect(() => {
+    dispatch(fetchSongStart());
+  }, [dispatch]);
 
   const deleteSong = async (id: string) => {
     try {
@@ -256,7 +254,7 @@ function Main() {
               </tr>
             </thead>
             <tbody>
-              {currentSongs.map((song) => (
+              {song && song.map((song) => (
                 <TableRow key={song._id}>
                   <td>{song.title}</td>
                   <td>{song.artist}</td>
