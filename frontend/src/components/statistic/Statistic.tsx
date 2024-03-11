@@ -154,7 +154,7 @@ function Statistic() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get<StatisticData>('http://localhost:4000/api/v1/song/statistics');
+      const response = await axios.get<StatisticData>('https://songapp-70jr.onrender.com/api/v1/song/statistics');
       setStatistics(response.data);
     } catch (error) {
       console.error('Error fetching statistics:', error);

@@ -168,7 +168,7 @@ function Main() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get<Song[]>('https://songapp-70jr.onrender.com/api/v1/song');
+      const response = await axios.get<Song[]>('http://localhost:4000/api/v1/song');
       setSongs(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -177,7 +177,7 @@ function Main() {
 
   const deleteSong = async (id: string) => {
     try {
-      await axios.delete(`https://songapp-70jr.onrender.com/api/v1/song/${id}`);
+      await axios.delete(`http://localhost:4000/api/v1/song/${id}`);
       // Remove the deleted song from the state
       setSongs(songs.filter(song => song._id !== id));
     } catch (error) {
@@ -191,7 +191,7 @@ function Main() {
 
   const handleUpdate = async (updatedSong: Song) => {
     try {
-      const response = await axios.patch(`https://songapp-70jr.onrender.com/api/v1/song/${updatedSong._id}`, updatedSong);
+      const response = await axios.patch(`http://localhost:4000/api/v1/song/${updatedSong._id}`, updatedSong);
       const updatedSongData = response.data;
       setSongs(songs.map(song => (song._id === updatedSongData.id ? updatedSongData : song)));
       setEditSong(null); // Clear the edit state
@@ -202,7 +202,7 @@ function Main() {
 
   const handleCreate = async () => {
     try {
-      const response = await axios.post(`https://songapp-70jr.onrender.com/api/v1/song`, newSong);
+      const response = await axios.post(`http://localhost:4000/api/v1/song`, newSong);
       const createdSong = response.data;
       setSongs([...songs, createdSong]);
       setNewSong({
