@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchSongStart, selectSong} from '../../state/songSlice';
-import { AppDispatch } from '../../state/store';
 import styled from '@emotion/styled';
 
 // Styled components for the styles
@@ -165,17 +162,22 @@ function Main() {
     genre: '',
   });
 
-  const dispatch: AppDispatch = useDispatch();
-  const song = useSelector(selectSong);
-  console.log(song)
-
   useEffect(() => {
-    dispatch(fetchSongStart());
-  }, [dispatch]);
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get<Song[]>('https://songapp-70jr.onrender.com/api/v1/song');
+      setSongs(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   const deleteSong = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:4000/api/v1/song/${id}`);
+      await axios.delete(`https://songapp-70jr.onrender.com/api/v1/song/${id}`);
       // Remove the deleted song from the state
       setSongs(songs.filter(song => song._id !== id));
     } catch (error) {
@@ -189,9 +191,9 @@ function Main() {
 
   const handleUpdate = async (updatedSong: Song) => {
     try {
-      const response = await axios.patch(`http://localhost:4000/api/v1/song/${updatedSong._id}`, updatedSong);
+      const response = await axios.patch(`https://songapp-70jr.onrender.com/api/v1/song/${updatedSong._id}`, updatedSong);
       const updatedSongData = response.data;
-      setSongs(songs.map(song => (song._id === updatedSongData._id ? updatedSongData : song)));
+      setSongs(songs.map(song => (song._id === updatedSongData.id ? updatedSongData : song)));
       setEditSong(null); // Clear the edit state
     } catch (error) {
       console.error('Error updating song:', error);
@@ -200,7 +202,7 @@ function Main() {
 
   const handleCreate = async () => {
     try {
-      const response = await axios.post(`http://localhost:4000/api/v1/song`, newSong);
+      const response = await axios.post(`https://songapp-70jr.onrender.com/api/v1/song`, newSong);
       const createdSong = response.data;
       setSongs([...songs, createdSong]);
       setNewSong({
@@ -254,7 +256,7 @@ function Main() {
               </tr>
             </thead>
             <tbody>
-              {song && song.map((song) => (
+              {currentSongs.map((song) => (
                 <TableRow key={song._id}>
                   <td>{song.title}</td>
                   <td>{song.artist}</td>
@@ -279,7 +281,6 @@ function Main() {
         <AddSong>
           <h2>Edit Song</h2>
           <form onSubmit={(e) => {
-            e.preventDefault(); 
             handleUpdate(editSong)
           }}>
             <input type="text" name="title" value={editSong.title} onChange={(e) => setEditSong({...editSong, title: e.target.value})} />
